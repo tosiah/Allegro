@@ -25,7 +25,8 @@ public class Header {
         return new Cart(driver);
     }
 
-    public Integer checkIndexOfProductsInCart(){
+    public Integer checkIndexOfProductsInCart() throws InterruptedException {
+        Thread.sleep(1000);
         WebElement indexEl = driver.findElement(indexOfProductsInCart);
         if(indexEl.getText().equals("")){
             return 0;
@@ -56,6 +57,7 @@ public class Header {
                 break;
             }
         }
+        assert(element!=null): "There is no such category";
         return element;
     }
 
@@ -68,7 +70,7 @@ public class Header {
                 break;
             }
         }
-        assert(element!=null);
+        assert(element!=null): "There is no such subcategory";
         return element;
     }
 }

@@ -1,20 +1,32 @@
 import org.junit.*;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
 
 import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Antonina on 2018-01-18.
  */
-public class AddingToCartTest {
+public class CartTest {
     public static WebDriver driver;
 
-    private void clearCart() {
+    private void clearCart() throws InterruptedException {
         Header header = new Header(driver);
         Cart cart = header.goToCartViaIcon();
         cart.clearCart();
         Assert.assertEquals((Integer) 0, header.checkIndexOfProductsInCart());
+    }
+
+    private SearchResultPage searchProductByCategory(String categoryName, String subCategoryName){
+        Header header = new Header(driver);
+        WebElement categoryNameEl = header.searchCategory(categoryName);
+        Actions actions = new Actions(driver);
+        actions.moveToElement(categoryNameEl).build().perform();
+        WebElement subCategoryNameEl = header.searchSubCategory(subCategoryName);
+        actions.moveToElement(subCategoryNameEl).click().build().perform();
+        return new SearchResultPage(driver);
     }
 
     @BeforeClass
@@ -24,21 +36,23 @@ public class AddingToCartTest {
         driver = new ChromeDriver();
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         driver.manage().window().maximize();
+        driver.get("http://allegro.pl");
     }
 
     @Before
-    public void beforeTest() {
-        driver.get("http://allegro.pl");
+    public void beforeTest() throws InterruptedException {
 
         Header header = new Header(driver);
         if (!header.checkIndexOfProductsInCart().equals(0)) {
             this.clearCart();
         }
+
+        driver.get("http://allegro.pl");
     }
 
 
     @Test
-    public void test() {
+    public void addToCartTest() {
         Header header = new Header(driver);
         SearchResultPage searchResultPage;
         ProductPage productPage;
@@ -53,24 +67,35 @@ public class AddingToCartTest {
         productPage.addToCart();
         cart = productPage.goToCart();
         Assert.assertNotNull(cart);
+        cart.unselectAllCheckBox();
     }
 
     @Test
-    public void test2() {
+    public void removeFromCartTest() throws InterruptedException {
         Header header = new Header(driver);
         SearchResultPage searchResultPage;
         ProductPage productPage;
         Cart cart;
 
-        searchResultPage = header.searchProduct("zegarek");
+        searchResultPage = this.searchProductByCategory("Dziecko", "Odzież");
         Assert.assertNotNull(searchResultPage);
 
         productPage = searchResultPage.chooseLink(2);
         Assert.assertNotNull(productPage);
 
         productPage.addToCart();
+        productPage = productPage.continueShopping();
+        Assert.assertNotNull(productPage);
+
+        Thread.sleep(1000);
+        driver.navigate().back();
+
+        productPage = searchResultPage.chooseLink(3);
+        Assert.assertNotNull(productPage);
+        productPage.addToCart();
         cart = productPage.goToCart();
         Assert.assertNotNull(cart);
+
     }
 
     @After

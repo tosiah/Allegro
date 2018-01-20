@@ -10,11 +10,28 @@ public class Cart {
     private static By decrementBtn = By.className("btn-decrement");
     private static By clearBtn = By.cssSelector(".clear-cart.btn-group .btn-group.base .btn");
     private static By confirmClearBtn = By.cssSelector("#removeModal .modal-footer .success-action button");
+    private static By checkBoxAll = By.cssSelector("#item-select-all-checkbox");
 
     private static WebDriver driver;
 
     public Cart(WebDriver driver){
         this.driver = driver;
+    }
+
+    public void selectAllCheckBox(){
+        WebElement checkBoxAllEl = driver.findElement(checkBoxAll);
+        if(!checkBoxAllEl.isSelected()){
+            checkBoxAllEl.click();
+        }
+        assert checkBoxAllEl.isSelected() : "Check box 'Select All' is unselected";
+    }
+
+    public void unselectAllCheckBox(){
+        WebElement checkBoxAllEl = driver.findElement(checkBoxAll);
+        if(checkBoxAllEl.isSelected()){
+            checkBoxAllEl.click();
+        }
+        assert !checkBoxAllEl.isSelected() : "Check box 'Select All' is selected";
     }
 
     public void clearCart(){
