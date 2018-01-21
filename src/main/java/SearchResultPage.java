@@ -16,7 +16,7 @@ public class SearchResultPage {
 
     public ProductPage chooseLink(int linkIndex) {
         List<WebElement> articleEls = driver.findElements(article);
-        assert (linkIndex < articleEls.size());
+        assert (linkIndex < articleEls.size()) : "The index is too high";
         WebElement linkEl = articleEls.get(linkIndex);
         linkEl.findElement(link).click();
 

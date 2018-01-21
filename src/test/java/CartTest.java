@@ -29,6 +29,11 @@ public class CartTest {
         return new SearchResultPage(driver);
     }
 
+    private void selectCheckBox(int indexOfCheckBox){
+        Cart cart = new Cart(driver);
+        cart.selectCheckBox(indexOfCheckBox).click();
+    }
+
     @BeforeClass
     public static void setup() {
         String exePath = "D:\\drivers\\chromedriver_win32\\chromedriver.exe";
@@ -50,7 +55,7 @@ public class CartTest {
         driver.get("http://allegro.pl");
     }
 
-
+/*
     @Test
     public void addToCartTest() {
         Header header = new Header(driver);
@@ -67,8 +72,8 @@ public class CartTest {
         productPage.addToCart();
         cart = productPage.goToCart();
         Assert.assertNotNull(cart);
-        cart.unselectAllCheckBox();
     }
+    */
 
     @Test
     public void removeFromCartTest() throws InterruptedException {
@@ -84,18 +89,20 @@ public class CartTest {
         Assert.assertNotNull(productPage);
 
         productPage.addToCart();
-        productPage = productPage.continueShopping();
-        Assert.assertNotNull(productPage);
+        cart = productPage.goToCart();
+        Assert.assertNotNull(cart);
 
-        Thread.sleep(1000);
-        driver.navigate().back();
+        searchResultPage = this.searchProductByCategory("Moda", "Obuwie");
+        Assert.assertNotNull(searchResultPage);
 
-        productPage = searchResultPage.chooseLink(3);
+        productPage = searchResultPage.chooseLink(1);
         Assert.assertNotNull(productPage);
         productPage.addToCart();
         cart = productPage.goToCart();
         Assert.assertNotNull(cart);
 
+        cart.unselectAllCheckBox();
+        this.selectCheckBox(0);
     }
 
     @After
