@@ -10,6 +10,8 @@ public class Cart {
     private static By decrementBtn = By.className("btn-decrement");
     private static By clearBtn = By.cssSelector(".clear-cart.btn-group .btn-group.base .btn");
     private static By confirmClearBtn = By.cssSelector("#removeModal .modal-footer .success-action button");
+    private static By clearBtnDropDown = By.cssSelector(".clear-cart.btn-group .btn-group.base .btn.dropdown-toggle");
+    private static By clearChosen = By.cssSelector(".clear-cart.btn-group .btn-group.base [href]");
     private static By checkBoxAll = By.cssSelector("#item-select-all-checkbox");
     private static By deskForm = By.cssSelector("#goToDeskForm");
     private static By checkBox = By.cssSelector(".items-list .table-cell.item-select .item-select-checkbox.ng-pristine");
@@ -29,6 +31,15 @@ public class Cart {
         }
         assert (element != null && !element.isSelected());
         return element;
+    }
+
+    public WebElement removeProduct(){
+        WebElement clearBtnDropDownEl = driver.findElement(clearBtnDropDown);
+        clearBtnDropDownEl.click();
+        WebElement clearChosenEl = driver.findElement(clearChosen);
+        clearChosenEl.click();
+        WebElement confirmClearBtnEl = driver.findElement(confirmClearBtn);
+        return confirmClearBtnEl;
     }
 
     public void selectAllCheckBox() {

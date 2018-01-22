@@ -19,6 +19,16 @@ public class CartTest {
         Assert.assertEquals((Integer) 0, header.checkIndexOfProductsInCart());
     }
 
+    private Cart removeProduct(){
+        Cart cart = new Cart(driver);
+        Actions actions = new Actions(driver);
+        WebElement removeBtn = cart.removeProduct();
+        if(removeBtn.isEnabled()) {
+            actions.moveToElement(removeBtn).click().build().perform();
+        }
+        return new Cart(driver);
+    }
+
     private SearchResultPage searchProductByCategory(String categoryName, String subCategoryName){
         Header header = new Header(driver);
         WebElement categoryNameEl = header.searchCategory(categoryName);
@@ -73,11 +83,10 @@ public class CartTest {
         cart = productPage.goToCart();
         Assert.assertNotNull(cart);
     }
-    */
+*/
 
     @Test
     public void removeFromCartTest() throws InterruptedException {
-        Header header = new Header(driver);
         SearchResultPage searchResultPage;
         ProductPage productPage;
         Cart cart;
@@ -92,7 +101,7 @@ public class CartTest {
         cart = productPage.goToCart();
         Assert.assertNotNull(cart);
 
-        searchResultPage = this.searchProductByCategory("Moda", "Obuwie");
+      /*  searchResultPage = this.searchProductByCategory("Moda", "Odzież damska");
         Assert.assertNotNull(searchResultPage);
 
         productPage = searchResultPage.chooseLink(1);
@@ -100,9 +109,12 @@ public class CartTest {
         productPage.addToCart();
         cart = productPage.goToCart();
         Assert.assertNotNull(cart);
+        */
 
         cart.unselectAllCheckBox();
         this.selectCheckBox(0);
+        cart = this.removeProduct();
+
     }
 
     @After
