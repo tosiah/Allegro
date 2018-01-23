@@ -5,34 +5,34 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class ProductPage {
-    private static By addToCartButton = By.id("add-to-cart");
-    private static By goToCartButton = By.id("add-to-cart-si-precart");
-    private static By continueShoppingButton = By.cssSelector(".btn.btn-link");
+    private static By addToCartBtn = By.id("add-to-cart");
+    private static By goToCartBtn = By.id("add-to-cart-si-precart");
+    private static By continueShoppingBtn = By.cssSelector(".modal.info-modal.modal-precart.show .modal-dialog .modal-content .modal-footer .btn.btn-link");
 
     private WebDriver driver;
 
-    public ProductPage(WebDriver driver){
+    public ProductPage(WebDriver driver) {
         this.driver = driver;
     }
 
-    public ProductPage addToCart(){
-        WebElement addingToCartEl = driver.findElement(addToCartButton);
+    public ProductPage addToCart() {
+        WebElement addingToCartEl = driver.findElement(addToCartBtn);
         addingToCartEl.click();
         return this;
     }
 
-    public Cart goToCart(){
+    public Cart goToCart() {
         WebDriverWait wait = new WebDriverWait(driver, 10);
-        wait.until(ExpectedConditions.visibilityOfElementLocated(goToCartButton));
-        WebElement goingToCartEl = driver.findElement(goToCartButton);
-        assert(goingToCartEl.isEnabled());
+        wait.until(ExpectedConditions.visibilityOfElementLocated(goToCartBtn));
+        WebElement goingToCartEl = driver.findElement(goToCartBtn);
+        assert (goingToCartEl.isEnabled());
         goingToCartEl.click();
         return new Cart(driver);
     }
 
-    public ProductPage continueShopping(){
-        WebElement continuingShoppingEl = driver.findElement(continueShoppingButton);
-        assert(continuingShoppingEl.isEnabled());
+    public ProductPage continueShopping() {
+        WebElement continuingShoppingEl = driver.findElement(continueShoppingBtn);
+        assert (continuingShoppingEl.isEnabled());
         continuingShoppingEl.click();
         return this;
     }

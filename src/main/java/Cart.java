@@ -12,6 +12,7 @@ public class Cart {
     private static By confirmClearBtn = By.cssSelector("#removeModal .modal-footer .success-action button");
     private static By clearBtnDropDown = By.cssSelector(".clear-cart.btn-group .btn-group.base .btn.dropdown-toggle");
     private static By clearChosen = By.cssSelector(".clear-cart.btn-group .btn-group.base [href]");
+    private static By confirmClearSelectedBtn = By.cssSelector("remove-selected-items-modal #removeModal .modal-footer .success-action button");
     private static By checkBoxAll = By.cssSelector("#item-select-all-checkbox");
     private static By deskForm = By.cssSelector("#goToDeskForm");
     private static By checkBox = By.cssSelector(".items-list .table-cell.item-select .item-select-checkbox.ng-pristine");
@@ -20,49 +21,6 @@ public class Cart {
 
     public Cart(WebDriver driver) {
         this.driver = driver;
-    }
-
-    public WebElement selectCheckBox(int indexOfCheckBox) {
-        WebElement deskFormEl = driver.findElement(deskForm);
-        List<WebElement> checkBoxEls = deskFormEl.findElements(checkBox);
-        WebElement element = null;
-        if (indexOfCheckBox < checkBoxEls.size()) {
-            element = checkBoxEls.get(indexOfCheckBox);
-        }
-        assert (element != null && !element.isSelected());
-        return element;
-    }
-
-    public WebElement removeProduct(){
-        WebElement clearBtnDropDownEl = driver.findElement(clearBtnDropDown);
-        clearBtnDropDownEl.click();
-        WebElement clearChosenEl = driver.findElement(clearChosen);
-        clearChosenEl.click();
-        WebElement confirmClearBtnEl = driver.findElement(confirmClearBtn);
-        return confirmClearBtnEl;
-    }
-
-    public void selectAllCheckBox() {
-        WebElement checkBoxAllEl = driver.findElement(checkBoxAll);
-        if (!checkBoxAllEl.isSelected()) {
-            checkBoxAllEl.click();
-        }
-        assert checkBoxAllEl.isSelected() : "Check box 'Select All' is unselected";
-    }
-
-    public void unselectAllCheckBox() {
-        WebElement checkBoxAllEl = driver.findElement(checkBoxAll);
-        if (checkBoxAllEl.isSelected()) {
-            checkBoxAllEl.click();
-        }
-        assert !checkBoxAllEl.isSelected() : "Check box 'Select All' is selected";
-    }
-
-    public void clearCart() {
-        WebElement clearBtnEl = driver.findElement(clearBtn);
-        clearBtnEl.click();
-        WebElement confirmClearBtnEl = driver.findElement(confirmClearBtn);
-        confirmClearBtnEl.click();
     }
 
     public WebElement chooseElement(int productIndex) {
@@ -84,5 +42,48 @@ public class Cart {
         WebElement decrementBtnEl = productEl.findElement(decrementBtn);
         assert (decrementBtnEl.isEnabled());
         return decrementBtnEl;
+    }
+
+    public void clearCart() {
+        WebElement clearBtnEl = driver.findElement(clearBtn);
+        clearBtnEl.click();
+        WebElement confirmClearBtnEl = driver.findElement(confirmClearBtn);
+        confirmClearBtnEl.click();
+    }
+
+    public void removeProductFromCart() {
+        WebElement clearBtnDropDownEl = driver.findElement(clearBtnDropDown);
+        clearBtnDropDownEl.click();
+        WebElement clearChosenEl = driver.findElement(clearChosen);
+        clearChosenEl.click();
+        WebElement confirmClearSelectedBtnEl = driver.findElement(confirmClearSelectedBtn);
+        confirmClearSelectedBtnEl.click();
+    }
+
+    public void selectAllCheckBox() {
+        WebElement checkBoxAllEl = driver.findElement(checkBoxAll);
+        if (!checkBoxAllEl.isSelected()) {
+            checkBoxAllEl.click();
+        }
+        assert checkBoxAllEl.isSelected() : "Check box 'Select All' is unselected";
+    }
+
+    public void unselectAllCheckBox() {
+        WebElement checkBoxAllEl = driver.findElement(checkBoxAll);
+        if (checkBoxAllEl.isSelected()) {
+            checkBoxAllEl.click();
+        }
+        assert !checkBoxAllEl.isSelected() : "Check box 'Select All' is selected";
+    }
+
+    public WebElement selectCheckBox(int indexOfCheckBox) {
+        WebElement deskFormEl = driver.findElement(deskForm);
+        List<WebElement> checkBoxEls = deskFormEl.findElements(checkBox);
+        WebElement element = null;
+        if (indexOfCheckBox < checkBoxEls.size()) {
+            element = checkBoxEls.get(indexOfCheckBox);
+        }
+        assert (element != null && !element.isSelected());
+        return element;
     }
 }

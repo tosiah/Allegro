@@ -10,7 +10,8 @@ import java.util.concurrent.TimeUnit;
  * Created by Antonina on 2018-01-18.
  */
 public class CartTest {
-    public static WebDriver driver;
+   // public static WebDriver driver;
+    public WebDriver driver;
 
     private void clearCart() throws InterruptedException {
         Header header = new Header(driver);
@@ -19,17 +20,7 @@ public class CartTest {
         Assert.assertEquals((Integer) 0, header.checkIndexOfProductsInCart());
     }
 
-    private Cart removeProduct(){
-        Cart cart = new Cart(driver);
-        Actions actions = new Actions(driver);
-        WebElement removeBtn = cart.removeProduct();
-        if(removeBtn.isEnabled()) {
-            actions.moveToElement(removeBtn).click().build().perform();
-        }
-        return new Cart(driver);
-    }
-
-    private SearchResultPage searchProductByCategory(String categoryName, String subCategoryName){
+    private SearchResultPage searchProductByCategory(String categoryName, String subCategoryName) {
         Header header = new Header(driver);
         WebElement categoryNameEl = header.searchCategory(categoryName);
         Actions actions = new Actions(driver);
@@ -39,7 +30,7 @@ public class CartTest {
         return new SearchResultPage(driver);
     }
 
-    private void selectCheckBox(int indexOfCheckBox){
+    private void selectCheckBox(int indexOfCheckBox) {
         Cart cart = new Cart(driver);
         cart.selectCheckBox(indexOfCheckBox).click();
     }
@@ -48,23 +39,26 @@ public class CartTest {
     public static void setup() {
         String exePath = "D:\\drivers\\chromedriver_win32\\chromedriver.exe";
         System.setProperty("webdriver.chrome.driver", exePath);
-        driver = new ChromeDriver();
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-        driver.manage().window().maximize();
-        driver.get("http://allegro.pl");
+       // driver = new ChromeDriver();
+       // driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+       // driver.manage().window().maximize();
     }
 
     @Before
     public void beforeTest() throws InterruptedException {
 
+        driver = new ChromeDriver();
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        driver.manage().window().maximize();
+
+
+
+        driver.get("http://allegro.pl");
         Header header = new Header(driver);
         if (!header.checkIndexOfProductsInCart().equals(0)) {
             this.clearCart();
         }
-
-        driver.get("http://allegro.pl");
     }
-
 /*
     @Test
     public void addToCartTest() {
@@ -83,13 +77,15 @@ public class CartTest {
         cart = productPage.goToCart();
         Assert.assertNotNull(cart);
     }
-*/
+    */
+
 
     @Test
     public void removeFromCartTest() throws InterruptedException {
         SearchResultPage searchResultPage;
         ProductPage productPage;
         Cart cart;
+        Header header = new Header(driver);
 
         searchResultPage = this.searchProductByCategory("Dziecko", "Odzież");
         Assert.assertNotNull(searchResultPage);
@@ -98,10 +94,10 @@ public class CartTest {
         Assert.assertNotNull(productPage);
 
         productPage.addToCart();
-        cart = productPage.goToCart();
-        Assert.assertNotNull(cart);
+        productPage = productPage.continueShopping();
+        Assert.assertNotNull(productPage);
 
-      /*  searchResultPage = this.searchProductByCategory("Moda", "Odzież damska");
+        searchResultPage = this.searchProductByCategory("Motoryzacja", "Chemia");
         Assert.assertNotNull(searchResultPage);
 
         productPage = searchResultPage.chooseLink(1);
@@ -109,11 +105,12 @@ public class CartTest {
         productPage.addToCart();
         cart = productPage.goToCart();
         Assert.assertNotNull(cart);
-        */
 
+        int numberOfProductsInCart = header.checkIndexOfProductsInCart();
         cart.unselectAllCheckBox();
         this.selectCheckBox(0);
-        cart = this.removeProduct();
+        cart.removeProductFromCart();
+        Assert.assertTrue(header.checkIndexOfProductsInCart() == numberOfProductsInCart - 1);
 
     }
 
