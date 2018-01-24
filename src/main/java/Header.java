@@ -45,7 +45,8 @@ public class Header {
         return new SearchResultPage(driver);
     }
 
-    public WebElement searchCategory(String categoryName) {
+    public WebElement searchCategory(String categoryName) throws InterruptedException {
+        Thread.sleep(1000);
         WebElement categoriesEl = driver.findElement(categories);
         categoriesEl.click();
         List<WebElement> optionsEls = driver.findElements(options);

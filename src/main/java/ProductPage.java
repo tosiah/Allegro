@@ -7,7 +7,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class ProductPage {
     private static By addToCartBtn = By.id("add-to-cart");
     private static By goToCartBtn = By.id("add-to-cart-si-precart");
-    private static By continueShoppingBtn = By.cssSelector(".modal.info-modal.modal-precart.show .modal-dialog .modal-content .modal-footer .btn.btn-link");
+    private static By continueShoppingBtn = By.cssSelector(".country-PL.ssi.modal-open .modal.info-modal.modal-precart.show .modal-dialog .modal-content .modal-footer button");
 
     private WebDriver driver;
 
@@ -30,7 +30,8 @@ public class ProductPage {
         return new Cart(driver);
     }
 
-    public ProductPage continueShopping() {
+    public ProductPage continueShopping() throws InterruptedException {
+        Thread.sleep(1000);
         WebElement continuingShoppingEl = driver.findElement(continueShoppingBtn);
         assert (continuingShoppingEl.isEnabled());
         continuingShoppingEl.click();

@@ -1,4 +1,5 @@
 import org.junit.*;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -10,8 +11,10 @@ import java.util.concurrent.TimeUnit;
  * Created by Antonina on 2018-01-18.
  */
 public class CartTest {
-   // public static WebDriver driver;
     public WebDriver driver;
+    private static By addToCartPopUpCheck = By.cssSelector(".modal-content .modal-header");
+    private static By searchResultPageCheck = By.cssSelector(".main-content .layout__right [data-box-name=items-v3]");
+    private static By productPageCheck = By.cssSelector("[itemprop=offers]");
 
     private void clearCart() throws InterruptedException {
         Header header = new Header(driver);
@@ -20,7 +23,7 @@ public class CartTest {
         Assert.assertEquals((Integer) 0, header.checkIndexOfProductsInCart());
     }
 
-    private SearchResultPage searchProductByCategory(String categoryName, String subCategoryName) {
+    private SearchResultPage searchProductByCategory(String categoryName, String subCategoryName) throws InterruptedException {
         Header header = new Header(driver);
         WebElement categoryNameEl = header.searchCategory(categoryName);
         Actions actions = new Actions(driver);
@@ -39,9 +42,6 @@ public class CartTest {
     public static void setup() {
         String exePath = "D:\\drivers\\chromedriver_win32\\chromedriver.exe";
         System.setProperty("webdriver.chrome.driver", exePath);
-       // driver = new ChromeDriver();
-       // driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-       // driver.manage().window().maximize();
     }
 
     @Before
@@ -51,33 +51,32 @@ public class CartTest {
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         driver.manage().window().maximize();
 
-
-
         driver.get("http://allegro.pl");
         Header header = new Header(driver);
         if (!header.checkIndexOfProductsInCart().equals(0)) {
             this.clearCart();
         }
     }
-/*
+
     @Test
-    public void addToCartTest() {
+    public void addToCartTest() throws InterruptedException {
         Header header = new Header(driver);
         SearchResultPage searchResultPage;
         ProductPage productPage;
-        Cart cart;
 
         searchResultPage = header.searchProduct("zegarek");
-        Assert.assertNotNull(searchResultPage);
+        Assert.assertTrue("Search result page didn't occur",driver.findElement(searchResultPageCheck)!=null);
 
         productPage = searchResultPage.chooseLink(2);
-        Assert.assertNotNull(productPage);
+        Assert.assertTrue("Going to product page didn't succeed",driver.findElement(productPageCheck)!=null);
 
+        int numberOfProductsInCart = header.checkIndexOfProductsInCart();
         productPage.addToCart();
-        cart = productPage.goToCart();
-        Assert.assertNotNull(cart);
+        Assert.assertTrue("Adding product to cart didn't succeed",driver.findElement(addToCartPopUpCheck)!=null);
+        productPage.goToCart();
+        Assert.assertTrue("Going to cart didn't succeed", driver.getCurrentUrl().equals("https://allegro.pl/cart"));
+        Assert.assertTrue("Adding product to cart didn't succeed", header.checkIndexOfProductsInCart() == (numberOfProductsInCart + 1));
     }
-    */
 
 
     @Test
@@ -88,35 +87,37 @@ public class CartTest {
         Header header = new Header(driver);
 
         searchResultPage = this.searchProductByCategory("Dziecko", "Odzież");
-        Assert.assertNotNull(searchResultPage);
+        Assert.assertTrue("Search result page didn't occur",driver.findElement(searchResultPageCheck)!=null);
 
         productPage = searchResultPage.chooseLink(2);
-        Assert.assertNotNull(productPage);
+        Assert.assertTrue("Going to product page didn't succeed",driver.findElement(productPageCheck)!=null);
 
         productPage.addToCart();
-        productPage = productPage.continueShopping();
-        Assert.assertNotNull(productPage);
+        Assert.assertTrue("Adding product to cart didn't succeed",driver.findElement(addToCartPopUpCheck)!=null);
+        productPage.continueShopping();
+        Assert.assertTrue("Going to product page didn't succeed",driver.findElement(productPageCheck)!=null);
 
         searchResultPage = this.searchProductByCategory("Motoryzacja", "Chemia");
-        Assert.assertNotNull(searchResultPage);
+        Assert.assertTrue("Search result page didn't occur",driver.findElement(searchResultPageCheck)!=null);
 
         productPage = searchResultPage.chooseLink(1);
-        Assert.assertNotNull(productPage);
+        Assert.assertTrue("Going to product page didn't succeed",driver.findElement(productPageCheck)!=null);
         productPage.addToCart();
+        Assert.assertTrue("Adding product to cart didn't succeed",driver.findElement(addToCartPopUpCheck)!=null);
         cart = productPage.goToCart();
-        Assert.assertNotNull(cart);
+        Assert.assertTrue("Going to cart didn't succeed", driver.getCurrentUrl().equals("https://allegro.pl/cart"));
 
         int numberOfProductsInCart = header.checkIndexOfProductsInCart();
         cart.unselectAllCheckBox();
         this.selectCheckBox(0);
         cart.removeProductFromCart();
-        Assert.assertTrue(header.checkIndexOfProductsInCart() == numberOfProductsInCart - 1);
+        Assert.assertTrue("Removing product didn't succeed", header.checkIndexOfProductsInCart() == (numberOfProductsInCart - 1));
 
     }
 
     @After
     public void closeWindow() {
-//        driver.close();
+        driver.close();
     }
 
 
