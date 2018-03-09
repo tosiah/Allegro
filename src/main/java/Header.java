@@ -6,10 +6,10 @@ import java.util.List;
 
 public class Header {
     private static By searchBar = By.className("metrum-search__query");
-    private static By categories = By.cssSelector(".opbox-metrum-header-dropdown.opbox-metrum-header-dropdown__categories a");
+    private static By categories = By.cssSelector(".fee54_2mDvq.fee54_1SADD.fee54_3EtAX.fee54_2uFef.fee54_2mDvq a");
     private static By searchBtn = By.cssSelector(".metrum-search__submit._xepa8._1c5ga._1amu3");
-    private static By options = By.cssSelector(".opbox-metrum-header-accordion__group.opbox-metrum-header__accordion-group");
-    private static By subMenuOptions = By.cssSelector(".opbox-metrum-header-list__item.opbox-metrum-header-list__item--link.opbox-metrum-header__list-item a");
+    private static By options = By.cssSelector(".fee54_2rIHW.fee54_33vjU");
+    private static By subMenuOptions = By.cssSelector(".fee54_1NJil.fee54_14dcF.fee54_3GPbu a");
     private static By cartIcon = By.className("metrum-cart-status");
     private static By indexOfProductsInCart = By.cssSelector(".cart-quantity.m-notification.m-notification--icon");
 
