@@ -132,6 +132,7 @@ public class Cart extends BasePage {
         return element;
     }
 
+    @Step
     public Cart incrementProduct(int productIndex) throws InterruptedException {
         int indexOfProductsInCart = checkIndexOfProductsInCart();
         System.out.println(indexOfProductsInCart);
@@ -150,6 +151,7 @@ public class Cart extends BasePage {
         return this;
     }
 
+    @Step
     public Cart decrementProduct(int productIndex) throws InterruptedException {
         int indexOfProductsInCart = checkIndexOfProductsInCart();
         WebElement productEl = chooseElement(productIndex);
@@ -168,7 +170,7 @@ public class Cart extends BasePage {
 
     public Cart decrementProductButtonShouldBeDisabled(int productIndex) {
         WebElement productEl = chooseElement(productIndex);
-        assert (!isDecrementPossible(productEl) & !productEl.findElement(decrementBtnSelector).isEnabled()) :
+        assert (!isDecrementPossible(productEl) && !productEl.findElement(decrementBtnSelector).isEnabled()) :
             "There is more than one product of this kind in the cart";
         return this;
     }
